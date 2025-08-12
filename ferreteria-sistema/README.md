@@ -33,15 +33,15 @@ Sistema completo de gestión empresarial desarrollado con Spring Boot, diseñado
 #### 1. Configurar Oracle Database
 ```sql
 -- Crear usuario para la aplicación
-CREATE USER ferreteria_user IDENTIFIED BY ferreteria_pass;
-GRANT CONNECT, RESOURCE, DBA TO ferreteria_user;
-GRANT UNLIMITED TABLESPACE TO ferreteria_user;
+CREATE USER LENGUAJES IDENTIFIED BY "123"
+GRANT CONNECT, RESOURCE, DBA TO LENGUAJES;
+GRANT UNLIMITED TABLESPACE TO LENGUAJES;
 ```
 
 #### 2. Ejecutar Script de Base de Datos
 ```bash
 # Ejecutar el script SQL completo
-sqlplus ferreteria_user/ferreteria_pass@localhost:1521/XE @ProyectoLengdeDatos_Completo.sql
+sqlplus LENGUAJES/123@localhost:1521/XE @ferreteria.sql
 ```
 
 ## 🛠️ Instalación y Configuración
@@ -71,9 +71,9 @@ mvn spring-boot:run
 ```
 
 ### 4. Acceder al Sistema
-- **URL Principal**: http://localhost:8080/ferreteria
-- **Usuario por defecto**: admin
-- **Contraseña por defecto**: admin123
+- **URL Principal**: http://localhost:8080/xe
+- **Usuario por defecto**: LENGUAJES
+- **Contraseña por defecto**: 123
 
 ## 📖 Estructura del Proyecto
 
@@ -333,7 +333,6 @@ Este proyecto está bajo la Licencia MIT. Ver archivo `LICENSE` para más detall
 
 Para soporte técnico o consultas:
 - 📧 Email: soporte@ferreteria-sistema.com
-- 📱 WhatsApp: +593 99 123 4567
 - 🌐 Web: www.ferreteria-sistema.com
 
 ---
