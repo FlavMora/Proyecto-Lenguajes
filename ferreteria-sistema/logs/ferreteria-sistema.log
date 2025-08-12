@@ -1021,3 +1021,192 @@ java.lang.ClassCastException: class java.io.ObjectStreamClass cannot be cast to 
         where
             u1_0.IDROL=? 
             and u1_0.ACTIVO=1
+2025-08-12 00:35:57 [restartedMain] INFO  c.f.s.FerreteriaSistemaApplication - Starting FerreteriaSistemaApplication using Java 22.0.2 with PID 27548 (D:\Lenguajes\Proyecto-Lenguajes\ferreteria-sistema\target\classes started by franm in D:\Lenguajes\Proyecto-Lenguajes\ferreteria-sistema)
+2025-08-12 00:35:57 [restartedMain] INFO  c.f.s.FerreteriaSistemaApplication - The following 2 profiles are active: "default", "@spring.profiles.active@"
+2025-08-12 00:35:57 [restartedMain] INFO  o.s.b.d.restart.ChangeableUrls - The Class-Path manifest attribute in C:\Users\franm\.m2\repository\com\oracle\database\jdbc\ojdbc11\23.3.0.23.09\ojdbc11-23.3.0.23.09.jar referenced one or more files that do not exist: file:/C:/Users/franm/.m2/repository/com/oracle/database/jdbc/ojdbc11/23.3.0.23.09/oraclepki.jar
+2025-08-12 00:35:57 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-08-12 00:35:57 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-08-12 00:35:58 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-12 00:35:59 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 57 ms. Found 6 JPA repository interfaces.
+2025-08-12 00:35:59 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-08-12 00:35:59 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-08-12 00:35:59 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-08-12 00:35:59 [restartedMain] INFO  o.a.c.c.C.[.[.[/ferreteria] - Initializing Spring embedded WebApplicationContext
+2025-08-12 00:35:59 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2013 ms
+2025-08-12 00:36:00 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-12 00:36:00 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2025-08-12 00:36:00 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-08-12 00:36:00 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-12 00:36:00 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-08-12 00:36:01 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@6cf53062
+2025-08-12 00:36:01 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-08-12 00:36:01 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-12 00:36:02 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-12 00:36:02 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-12 00:36:03 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-08-12 00:36:05 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoint(s) beneath base path '/actuator'
+2025-08-12 00:36:05 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@74bdb2ae, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@477e8b5a, org.springframework.security.web.context.SecurityContextHolderFilter@47509bd5, org.springframework.security.web.header.HeaderWriterFilter@18a8c417, org.springframework.web.filter.CorsFilter@6bb332b4, org.springframework.security.web.csrf.CsrfFilter@281aa950, org.springframework.security.web.authentication.logout.LogoutFilter@4cce964f, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@1bf178cc, org.springframework.security.web.session.ConcurrentSessionFilter@6457704a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6e32cd56, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2570ed16, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@56097271, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@61e92112, org.springframework.security.web.session.SessionManagementFilter@63ce1df5, org.springframework.security.web.access.ExceptionTranslationFilter@15775e08, org.springframework.security.web.access.intercept.AuthorizationFilter@12d7537]
+2025-08-12 00:36:06 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-08-12 00:36:06 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/ferreteria'
+2025-08-12 00:36:06 [restartedMain] INFO  c.f.s.FerreteriaSistemaApplication - Started FerreteriaSistemaApplication in 9.295 seconds (process running for 9.753)
+2025-08-12 00:36:31 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[.[/ferreteria] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-12 00:36:31 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-08-12 00:36:31 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-08-12 00:36:31 [http-nio-8080-exec-1] DEBUG o.s.security.web.FilterChainProxy - Securing GET /roles
+2025-08-12 00:36:31 [http-nio-8080-exec-1] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/ferreteria/roles' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
+2025-08-12 00:36:31 [http-nio-8080-exec-1] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-08-12 00:36:31 [http-nio-8080-exec-1] DEBUG o.s.s.w.s.SessionManagementFilter - Request requested invalid session id 3BE34E0CCF593C408E7F8F352F054844
+2025-08-12 00:36:31 [http-nio-8080-exec-1] WARN  o.s.w.s.h.HandlerMappingIntrospector - Cache miss for REQUEST dispatch to '/ferreteria/roles' (previous null). Performing MatchableHandlerMapping lookup. This is logged once only at WARN level, and every time at TRACE.
+2025-08-12 00:36:31 [http-nio-8080-exec-1] DEBUG o.s.s.w.s.HttpSessionRequestCache - Saved request http://localhost:8080/ferreteria/roles?continue to session
+2025-08-12 00:36:31 [http-nio-8080-exec-1] DEBUG o.s.s.web.DefaultRedirectStrategy - Redirecting to http://localhost:8080/ferreteria/login
+2025-08-12 00:36:31 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Securing GET /login
+2025-08-12 00:36:31 [http-nio-8080-exec-2] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
+2025-08-12 00:36:31 [http-nio-8080-exec-2] DEBUG o.s.security.web.FilterChainProxy - Secured GET /login
+2025-08-12 00:36:32 [http-nio-8080-exec-4] DEBUG o.s.security.web.FilterChainProxy - Securing POST /login
+2025-08-12 00:36:32 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        u 
+    FROM
+        Usuario u 
+    JOIN
+        
+    FETCH
+        u.rol 
+    WHERE
+        u.nombreUsuario = :nombreUsuario 
+        OR u.email = :email */ select
+            u1_0.IDUSUARIO,
+            u1_0.ACTIVO,
+            u1_0.APELLIDOS,
+            u1_0.CONTRASENA,
+            u1_0.EMAIL,
+            u1_0.FECHA_CREACION,
+            u1_0.FECHA_MODIFICACION,
+            u1_0.INTENTOS_FALLIDOS,
+            u1_0.NOMBRE,
+            u1_0.NOMBREUSUARIO,
+            u1_0.IDROL,
+            r1_0.IDROL,
+            r1_0.ACTIVO,
+            r1_0.DESCRIPCION,
+            r1_0.FECHA_CREACION,
+            r1_0.FECHA_MODIFICACION,
+            r1_0.NOMBRE,
+            u1_0.TELEFONO,
+            u1_0.ULTIMO_ACCESO 
+        from
+            USUARIOS u1_0 
+        join
+            ROLES r1_0 
+                on r1_0.IDROL=u1_0.IDROL 
+        where
+            u1_0.NOMBREUSUARIO=? 
+            or u1_0.EMAIL=?
+2025-08-12 00:36:33 [http-nio-8080-exec-4] DEBUG o.s.s.a.d.DaoAuthenticationProvider - Authenticated user
+2025-08-12 00:36:33 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.s.ChangeSessionIdAuthenticationStrategy - Changed session id from 9FA96ADC48D5D1D80D7FDE4D751DCFFD
+2025-08-12 00:36:33 [http-nio-8080-exec-4] DEBUG o.s.s.c.session.SessionRegistryImpl - Registering session 63C30AA13A1F2F1DEC0EE16AFB51EC06, for principal com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664
+2025-08-12 00:36:33 [http-nio-8080-exec-4] DEBUG o.s.s.w.c.CsrfAuthenticationStrategy - Replaced CSRF Token
+2025-08-12 00:36:33 [http-nio-8080-exec-4] DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Stored SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]] to HttpSession [org.apache.catalina.session.StandardSessionFacade@1e4825b0]
+2025-08-12 00:36:33 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.UsernamePasswordAuthenticationFilter - Set SecurityContextHolder to UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]
+2025-08-12 00:36:33 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.r.TokenBasedRememberMeServices - Did not send remember-me cookie (principal did not set parameter 'remember-me')
+2025-08-12 00:36:33 [http-nio-8080-exec-4] DEBUG o.s.s.w.a.r.TokenBasedRememberMeServices - Remember-me login not requested.
+2025-08-12 00:36:33 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Securing GET /dashboard
+2025-08-12 00:36:33 [http-nio-8080-exec-3] DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]]
+2025-08-12 00:36:33 [http-nio-8080-exec-3] DEBUG o.s.s.w.a.r.RememberMeAuthenticationFilter - SecurityContextHolder not populated with remember-me token, as it already contained: 'UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]'
+2025-08-12 00:36:33 [http-nio-8080-exec-3] DEBUG o.s.security.web.FilterChainProxy - Secured GET /dashboard
+2025-08-12 00:36:35 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Securing GET /roles
+2025-08-12 00:36:35 [http-nio-8080-exec-5] DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]]
+2025-08-12 00:36:35 [http-nio-8080-exec-5] DEBUG o.s.s.w.a.r.RememberMeAuthenticationFilter - SecurityContextHolder not populated with remember-me token, as it already contained: 'UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]'
+2025-08-12 00:36:35 [http-nio-8080-exec-5] DEBUG o.s.security.web.FilterChainProxy - Secured GET /roles
+2025-08-12 00:36:35 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/roles
+2025-08-12 00:36:35 [http-nio-8080-exec-6] DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]]
+2025-08-12 00:36:35 [http-nio-8080-exec-6] DEBUG o.s.s.w.a.r.RememberMeAuthenticationFilter - SecurityContextHolder not populated with remember-me token, as it already contained: 'UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]'
+2025-08-12 00:36:35 [http-nio-8080-exec-6] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/roles
+2025-08-12 00:36:35 [http-nio-8080-exec-6] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.ferreteria.sistema.controller.rest.RolRestController.listar(); target is of class [com.ferreteria.sistema.controller.rest.RolRestController]
+2025-08-12 00:36:36 [http-nio-8080-exec-6] DEBUG o.s.s.a.m.AuthorizationManagerBeforeMethodInterceptor - Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.ferreteria.sistema.controller.rest.RolRestController.listar(); target is of class [com.ferreteria.sistema.controller.rest.RolRestController]
+2025-08-12 00:36:36 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* <criteria> */ select
+        r1_0.IDROL,
+        r1_0.ACTIVO,
+        r1_0.DESCRIPCION,
+        r1_0.FECHA_CREACION,
+        r1_0.FECHA_MODIFICACION,
+        r1_0.NOMBRE 
+    from
+        ROLES r1_0 
+    order by
+        r1_0.NOMBRE
+2025-08-12 00:36:36 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        COUNT(u) 
+    FROM
+        Usuario u 
+    WHERE
+        u.rol.idRol = :idRol 
+        AND u.activo = true */ select
+            count(u1_0.IDUSUARIO) 
+        from
+            USUARIOS u1_0 
+        where
+            u1_0.IDROL=? 
+            and u1_0.ACTIVO=1
+2025-08-12 00:36:36 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        COUNT(u) 
+    FROM
+        Usuario u 
+    WHERE
+        u.rol.idRol = :idRol 
+        AND u.activo = true */ select
+            count(u1_0.IDUSUARIO) 
+        from
+            USUARIOS u1_0 
+        where
+            u1_0.IDROL=? 
+            and u1_0.ACTIVO=1
+2025-08-12 00:36:36 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        COUNT(u) 
+    FROM
+        Usuario u 
+    WHERE
+        u.rol.idRol = :idRol 
+        AND u.activo = true */ select
+            count(u1_0.IDUSUARIO) 
+        from
+            USUARIOS u1_0 
+        where
+            u1_0.IDROL=? 
+            and u1_0.ACTIVO=1
+2025-08-12 00:36:36 [http-nio-8080-exec-6] DEBUG org.hibernate.SQL - 
+    /* SELECT
+        COUNT(u) 
+    FROM
+        Usuario u 
+    WHERE
+        u.rol.idRol = :idRol 
+        AND u.activo = true */ select
+            count(u1_0.IDUSUARIO) 
+        from
+            USUARIOS u1_0 
+        where
+            u1_0.IDROL=? 
+            and u1_0.ACTIVO=1
+2025-08-12 00:36:38 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/roles/undefined
+2025-08-12 00:36:38 [http-nio-8080-exec-9] DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]]
+2025-08-12 00:36:38 [http-nio-8080-exec-9] DEBUG o.s.s.w.a.r.RememberMeAuthenticationFilter - SecurityContextHolder not populated with remember-me token, as it already contained: 'UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]'
+2025-08-12 00:36:38 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/roles/undefined
+2025-08-12 00:36:38 [http-nio-8080-exec-9] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: "undefined"]
+2025-08-12 00:36:38 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
+2025-08-12 00:36:38 [http-nio-8080-exec-9] DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]]
+2025-08-12 00:36:38 [http-nio-8080-exec-9] DEBUG o.s.s.w.a.r.RememberMeAuthenticationFilter - SecurityContextHolder not populated with remember-me token, as it already contained: 'UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]'
+2025-08-12 00:36:38 [http-nio-8080-exec-9] DEBUG o.s.security.web.FilterChainProxy - Secured GET /error
+2025-08-12 00:36:55 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/roles/undefined
+2025-08-12 00:36:55 [http-nio-8080-exec-10] DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]]
+2025-08-12 00:36:55 [http-nio-8080-exec-10] DEBUG o.s.s.w.a.r.RememberMeAuthenticationFilter - SecurityContextHolder not populated with remember-me token, as it already contained: 'UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]'
+2025-08-12 00:36:55 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/roles/undefined
+2025-08-12 00:36:55 [http-nio-8080-exec-10] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: "undefined"]
+2025-08-12 00:36:55 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Securing GET /error
+2025-08-12 00:36:55 [http-nio-8080-exec-10] DEBUG o.s.s.w.c.HttpSessionSecurityContextRepository - Retrieved SecurityContextImpl [Authentication=UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]]
+2025-08-12 00:36:55 [http-nio-8080-exec-10] DEBUG o.s.s.w.a.r.RememberMeAuthenticationFilter - SecurityContextHolder not populated with remember-me token, as it already contained: 'UsernamePasswordAuthenticationToken [Principal=com.ferreteria.sistema.service.CustomUserDetailsService$CustomUserPrincipal@237e9664, Credentials=[PROTECTED], Authenticated=true, Details=WebAuthenticationDetails [RemoteIpAddress=0:0:0:0:0:0:0:1, SessionId=9FA96ADC48D5D1D80D7FDE4D751DCFFD], Granted Authorities=[ROLE_ADMINISTRADOR]]'
+2025-08-12 00:36:55 [http-nio-8080-exec-10] DEBUG o.s.security.web.FilterChainProxy - Secured GET /error
