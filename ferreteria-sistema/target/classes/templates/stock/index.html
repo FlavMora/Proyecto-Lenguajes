@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Stock - Sistema Ferretería</title>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-tools"></i> Ferretería</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/dashboard}"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li sec:authorize="hasAnyRole('ADMINISTRADOR','GERENTE','VENDEDOR')"><a th:href="@{/clientes}"><i class="fas fa-users"></i> Clientes</a></li>
+                    <li sec:authorize="hasAnyRole('ADMINISTRADOR','GERENTE','BODEGUERO')"><a th:href="@{/productos}"><i class="fas fa-box"></i> Productos</a></li>
+                    <li sec:authorize="hasAnyRole('ADMINISTRADOR','GERENTE','BODEGUERO')"><a th:href="@{/stock}" class="active"><i class="fas fa-warehouse"></i> Stock</a></li>
+                    <li sec:authorize="hasAnyRole('ADMINISTRADOR','GERENTE','VENDEDOR')"><a th:href="@{/facturas}"><i class="fas fa-file-invoice"></i> Facturas</a></li>
+                    <li sec:authorize="hasAnyRole('ADMINISTRADOR','GERENTE','BODEGUERO')"><a th:href="@{/pedidos}"><i class="fas fa-shopping-cart"></i> Pedidos</a></li>
+                    <li sec:authorize="hasAnyRole('ADMINISTRADOR','GERENTE')"><a th:href="@{/empleados}"><i class="fas fa-user-tie"></i> Empleados</a></li>
+                    <li sec:authorize="hasAnyRole('ADMINISTRADOR','GERENTE','BODEGUERO')"><a th:href="@{/proveedores}"><i class="fas fa-truck"></i> Proveedores</a></li>
+                    <li sec:authorize="hasRole('ADMINISTRADOR')"><a th:href="@{/usuarios}"><i class="fas fa-user-cog"></i> Usuarios</a></li>
+                    <li sec:authorize="hasRole('ADMINISTRADOR')"><a th:href="@{/roles}"><i class="fas fa-shield-alt"></i> Roles</a></li>
+                    <li sec:authorize="hasAnyRole('ADMINISTRADOR','GERENTE')"><a th:href="@{/horarios}"><i class="fas fa-clock"></i> Horarios</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h1>Gestión de Stock</h1>
+                <div class="user-menu">
+                    <span><i class="fas fa-user"></i> <span th:text="${#authentication?.name}">Usuario</span></span>
+                    <button class="btn-logout"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>Control de Stock</h1>
+                    <p>Administra el inventario de productos de tu ferretería</p>
+                </div>
+
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3>Inventario Actual</h3>
+                        <div class="d-flex gap-2">
+                            <select id="filterStock" class="form-control" style="width: 200px;">
+                                <option value="">Todos los productos</option>
+                                <option value="bajo">Stock bajo (&lt; 10)</option>
+                                <option value="agotado">Sin stock</option>
+                                <option value="disponible">Con stock</option>
+                            </select>
+                            <input type="text" id="searchStock" placeholder="Buscar productos..." class="form-control" style="width: 300px;">
+                            <button class="btn btn-primary" onclick="openMovementModal()">
+                                <i class="fas fa-exchange-alt"></i> Movimiento de Stock
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="stockTable"></div>
+                    </div>
+                </div>
+
+                <!-- Bloque de alertas eliminado -->
+            </div>
+        </main>
+    </div>
+
+    <div id="movementModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Movimiento de Stock</h3>
+                <button class="modal-close" onclick="closeModal('movementModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="movementForm">
+                <div class="form-group">
+                    <label for="producto">Producto *</label>
+                    <select id="producto" name="producto" class="form-control" required>
+                        <option value="">Seleccione un producto</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipoMovimiento">Tipo de Movimiento *</label>
+                    <select id="tipoMovimiento" name="tipoMovimiento" class="form-control" required>
+                        <option value="">Seleccione el tipo</option>
+                        <option value="entrada">Entrada (Agregar stock)</option>
+                        <option value="salida">Salida (Reducir stock)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="cantidad">Cantidad *</label>
+                    <input type="number" id="cantidad" name="cantidad" class="form-control" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="motivo">Motivo</label>
+                    <input type="text" id="motivo" name="motivo" class="form-control" placeholder="Descripción del movimiento">
+                </div>
+
+                <div class="d-flex justify-between gap-2 mt-3">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('movementModal')">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Registrar Movimiento
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para editar stock -->
+    <div id="editStockModal" class="modal">
+        <div class="modal-content modal-wide">
+            <div class="modal-header">
+                <h3>Editar Stock</h3>
+                <button class="modal-close" onclick="closeModal('editStockModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="editStockForm">
+                <input type="hidden" id="editStockId" name="editStockId">
+                
+                <div class="form-group">
+                    <label>Producto:</label>
+                    <p id="editProductoInfo" class="form-text text-muted"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="editCantidad">Cantidad Actual *</label>
+                    <input type="number" id="editCantidad" name="editCantidad" class="form-control" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editUbicacion">Ubicación</label>
+                    <input type="text" id="editUbicacion" name="editUbicacion" class="form-control" placeholder="Ej: ALMACEN PRINCIPAL">
+                </div>
+
+                <div class="d-flex justify-between gap-2 mt-3">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('editStockModal')">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Actualizar Stock
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        .stock-low { background-color: #fff3cd !important; }
+        .stock-out { background-color: #f8d7da !important; }
+        .stock-good { background-color: #d4edda !important; }
+    </style>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/stock.js}"></script>
+</body>
+</html>
+
