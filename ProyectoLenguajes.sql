@@ -1,8 +1,10 @@
---- ========================================================================
-    -- PROYECTO LENGUAJE DE BASE DE DATOS - SISTEMA FERRETERIA
---- ========================================================================
+﻿    -- ========================================================================
+    -- PROYECTO LENGUAJE DE DATOS - SISTEMA FERRETERÃA
+    -- Archivo SQL completo con procedimientos, funciones, cursores, 
+    -- expresiones regulares y triggers para gestiÃ³n de ferreterÃ­a
+    -- ========================================================================
 
-    -- Eliminar tablas si existen (para  limpiar)
+    -- Eliminar tablas si existen (para recreaciÃ³n limpia)
     BEGIN
         EXECUTE IMMEDIATE 'DROP TABLE detalleFactura CASCADE CONSTRAINTS';
     EXCEPTION
@@ -88,7 +90,7 @@
     /
 
     -- ========================================================================
-    -- TABLAS
+    -- DEFINICIÃ“N DE TABLAS
     -- ========================================================================
 
     -- Tabla Roles: Define los diferentes tipos de usuarios del sistema
@@ -1706,7 +1708,7 @@
         END fn_clientes_mayor_compra;
         
         -- ==============================
-        -- CRUD Empleados
+        -- CRUD Empleados (faltantes)
         -- ==============================
         PROCEDURE sp_insertar_empleado(p_nombre VARCHAR2, p_apellidos VARCHAR2, p_direccion VARCHAR2,
                                     p_telefono VARCHAR2, p_email VARCHAR2, p_cedula VARCHAR2,
@@ -1826,7 +1828,7 @@
         END fn_listar_empleados;
 
         -- ==============================
-        -- CRUD Proveedores 
+        -- CRUD Proveedores (faltantes)
         -- ==============================
         PROCEDURE sp_insertar_proveedor(p_nombre VARCHAR2, p_direccion VARCHAR2, p_telefono VARCHAR2,
                                         p_email VARCHAR2, p_contacto VARCHAR2, p_ruc VARCHAR2,
@@ -1973,7 +1975,7 @@
     INSERT INTO Productos (nombreProducto, descripcion, codigo_producto, categoria, marca, precio, precio_compra, IdProveedor)
     VALUES ('Tornillos Autorroscantes', 'Caja x100 tornillos 2 pulgadas', 'TORN-001', 'FERRETERIA', 'Generico', 8.75, 5.20, 2);
 
-    -- Confirmar
+    -- Confirmar cambios
     COMMIT;
 
     -- ========================================================================
@@ -2339,7 +2341,7 @@
     -- ÃNDICES PARA OPTIMIZACIÃ“N DE CONSULTAS
     -- ========================================================================
 
-    -- Ãndices para mejorar rendimiento en consultas frecuentes 
+    -- Ãndices para mejorar rendimiento en consultas frecuentes (seguros si ya existen)
     BEGIN
     EXECUTE IMMEDIATE 'CREATE INDEX idx_clientes_email ON Clientes(email)';
     EXCEPTION
@@ -2396,7 +2398,419 @@
     END;
     /
 
-  
+    -- ========================================================================
+    -- COMENTARIOS FINALES
+    -- ========================================================================
+
+    -- Este archivo SQL completo incluye:
+    -- 1. DefiniciÃ³n completa de todas las tablas con restricciones y validaciones
+    -- 2. 12 triggers para auditorÃ­a, validaciones y automatizaciÃ³n
+    -- 3. Un paquete completo con mÃ¡s de 20 procedimientos y funciones
+    -- 4. 4 procedimientos que utilizan cursores para procesamiento avanzado
+    -- 5. 4 funciones que implementan expresiones regulares para validaciones
+    -- 6. Triggers en 6 tablas diferentes con 2 acciones cada una
+    -- 7. DocumentaciÃ³n detallada de cada componente
+    -- 8. Datos de prueba inicial para comenzar a trabajar
+    -- 9. Ãndices para optimizaciÃ³n del rendimiento
+    -- 10. Procedimientos de mantenimiento y utilidad
+
+    -- El sistema estÃ¡ listo para ser implementado en Oracle Database
+    -- y proporciona una base sÃ³lida para el desarrollo de la aplicaciÃ³n Java Spring Boot
+/* ================================================================
+   DATOS MASIVOS (≥20 registros por tabla) - ORACLE
+   Requiere que las tablas, triggers y paquetes ya existan.
+   NO agrega roles nuevos; usa los 4 roles base existentes.
+   Pegar después del último COMMIT de creación.
+   ================================================================ */
+
+ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD';
+
+--------------------------------------------------------------------
+-- USUARIOS (25) con rol aleatorio entre los 4 existentes
+--------------------------------------------------------------------
+DECLARE
+    TYPE t_num_tab IS TABLE OF NUMBER;
+  v_roles     t_num_tab;        -- IDs de los 4 roles base
+  v_id_rol    NUMBER;
+  v_base_pwd  VARCHAR2(255) := '$2a$12$dqlI7R99JSEZTZgrkFKjqeQMutvzs8Mh.N1EsRsVrw3y8TKF.S292'; -- bcrypt dummy
+  v_activo    NUMBER;
+  v_ult_acc   DATE;
+    BEGIN
+  -- Cargar exactamente los 4 roles permitidos
+    SELECT IdRol BULK COLLECT INTO v_roles
+    FROM Roles
+    WHERE UPPER(nombre) IN ('ADMINISTRADOR','VENDEDOR','BODEGUERO','GERENTE');
+
+    IF v_roles.COUNT <> 4 THEN
+    RAISE_APPLICATION_ERROR(-20099, 'Deben existir exactamente 4 roles base: ADMINISTRADOR, VENDEDOR, BODEGUERO, GERENTE.');
+    END IF;
+
+    FOR i IN 1..25 LOOP
+    v_id_rol  := v_roles(TRUNC(DBMS_RANDOM.VALUE(1, v_roles.COUNT + 1))); -- aleatorio 1..4
+    v_activo  := CASE WHEN DBMS_RANDOM.VALUE < 0.8 THEN 1 ELSE 0 END;     -- 80% activos
+    v_ult_acc := CASE WHEN v_activo = 1
+                      THEN TRUNC(SYSDATE) - TRUNC(DBMS_RANDOM.VALUE(0, 90))
+                      ELSE NULL
+    END;
+
+    BEGIN
+    INSERT INTO Usuarios (
+        nombreUsuario, contrasena, email, nombre, apellidos, telefono,
+        IdRol, activo, ultimo_acceso
+    )
+    VALUES (
+               'user' || LPAD(i,3,'0'),
+               v_base_pwd,
+               'user' || LPAD(i,3,'0') || '@ferre.com',
+               'Usuario' || i,
+               'Prueba' || i,
+               '222-33' || LPAD(TO_CHAR(400 + i),3,'0'), -- cumple ^[0-9-]+$
+               v_id_rol,
+               v_activo,
+               v_ult_acc
+           );
+    EXCEPTION
+      WHEN DUP_VAL_ON_INDEX THEN NULL;
+    END;
+    END LOOP;
+
+    COMMIT;
+    END;
+    /
+
+--------------------------------------------------------------------
+-- CLIENTES (30)
+--------------------------------------------------------------------
+DECLARE
+    BEGIN
+    FOR i IN 1..30 LOOP
+    BEGIN
+    INSERT INTO Clientes (nombreCliente, apellidos, direccion, telefono, email, cedula, tipo_cliente, limite_credito, activo)
+    VALUES (
+               'Cliente' || i,
+               'Demo' || i,
+               'Calle ' || i || ', Barrio Centro',
+               '2' || LPAD(TO_CHAR(20000000 + i),8,'0'),
+               'cliente' || i || '@correo.com',
+               '1-0' || LPAD(i,9,'0'),
+               CASE WHEN MOD(i,10) IN (0,1) THEN 'VIP'
+                    WHEN MOD(i,10) IN (2,3,4) THEN 'MAYORISTA'
+                    ELSE 'REGULAR' END,
+               CASE WHEN MOD(i,10) IN (0,1) THEN 10000 ELSE 0 END,
+               1
+           );
+    EXCEPTION WHEN DUP_VAL_ON_INDEX THEN NULL; END;
+    END LOOP;
+    COMMIT;
+    END;
+    /
+
+--------------------------------------------------------------------
+-- EMPLEADOS (25)
+--------------------------------------------------------------------
+DECLARE
+    BEGIN
+    FOR i IN 1..25 LOOP
+    BEGIN
+    INSERT INTO Empleados (nombreEmpleado, apellidos, direccion, telefono, email, cedula, puesto, salario, activo, fecha_ingreso)
+    VALUES (
+               'Empleado' || i,
+               'Apellido' || i,
+               'Avenida ' || i || ', Zona Industrial',
+               CASE WHEN MOD(i,2)=0 THEN '222-333-4' || LPAD(TO_CHAR(100+i),3,'0') ELSE '2' || LPAD(TO_CHAR(30000000 + i),8,'0') END,
+               'empleado' || i || '@empresa.com',
+               'E-' || LPAD(i,10,'0'),
+               CASE MOD(i,5) WHEN 0 THEN 'Cajero' WHEN 1 THEN 'Vendedor' WHEN 2 THEN 'Bodeguero' WHEN 3 THEN 'Encargado' ELSE 'Asistente' END,
+               500 + (i*25),
+               1,
+               SYSDATE - (i*7)
+           );
+    EXCEPTION WHEN DUP_VAL_ON_INDEX THEN NULL; END;
+    END LOOP;
+    COMMIT;
+    END;
+    /
+
+--------------------------------------------------------------------
+-- HORARIOS (60: 3 días * 20 empleados)
+--------------------------------------------------------------------
+DECLARE
+    v_fecha DATE := TRUNC(SYSDATE)-10;
+    BEGIN
+    FOR r IN (SELECT IdEmpleado FROM Empleados WHERE ROWNUM <= 20 ORDER BY IdEmpleado) LOOP
+    FOR d IN 0..2 LOOP
+    BEGIN
+    INSERT INTO Horarios (IdEmpleado, fecha, hora_entrada, hora_salida, observaciones)
+    VALUES (r.IdEmpleado, v_fecha + d, 8, 17 + CASE WHEN MOD(d,2)=0 THEN 0 ELSE 0.5 END, 'Turno regular');
+    EXCEPTION WHEN OTHERS THEN NULL; END;
+    END LOOP;
+    END LOOP;
+    COMMIT;
+    END;
+    /
+
+--------------------------------------------------------------------
+-- PROVEEDORES (25)
+--------------------------------------------------------------------
+DECLARE
+    BEGIN
+    FOR i IN 1..25 LOOP
+    BEGIN
+    INSERT INTO Proveedores (nombreProveedor, direccion, telefono, email, contacto_principal, ruc, condiciones_pago, calificacion, activo)
+    VALUES (
+               'Proveedor ' || LPAD(i,2,'0'),
+               'Zona Comercial #' || i,
+               '221-11' || LPAD(TO_CHAR(100 + i),3,'0'),
+               'contacto' || i || '@prove.com',
+               'Contacto ' || i,
+               '9' || LPAD(TO_CHAR(100000000000 + i),12,'0'),
+               CASE WHEN MOD(i,3)=0 THEN 'CREDITO 30' WHEN MOD(i,3)=1 THEN 'CONTADO' ELSE 'CREDITO 15' END,
+               3.5 + (MOD(i,15)/10),
+               1
+           );
+    EXCEPTION WHEN DUP_VAL_ON_INDEX THEN NULL; END;
+    END LOOP;
+    COMMIT;
+    END;
+    /
+
+--------------------------------------------------------------------
+-- PRODUCTOS (60) y asegurar fila en STOCK por producto
+--------------------------------------------------------------------
+DECLARE
+    v_min_prv NUMBER;
+  v_cnt_prv NUMBER;
+  v_id_prv  NUMBER;
+  v_cat     VARCHAR2(50);
+  v_marca   VARCHAR2(50);
+  v_codigo  VARCHAR2(50);
+    BEGIN
+    SELECT MIN(IdProveedor), COUNT(*) INTO v_min_prv, v_cnt_prv FROM Proveedores;
+
+    FOR i IN 1..60 LOOP
+    v_id_prv := v_min_prv + MOD(i-1, v_cnt_prv);
+    v_cat  := CASE MOD(i,6)
+                WHEN 0 THEN 'HERRAMIENTAS'
+                WHEN 1 THEN 'ELECTRICO'
+                WHEN 2 THEN 'PLOMERIA'
+                WHEN 3 THEN 'PINTURA'
+                WHEN 4 THEN 'FERRETERIA'
+                ELSE 'SEGURIDAD'
+    END;
+    v_marca := CASE MOD(i,5)
+                 WHEN 0 THEN 'Stanley'
+                 WHEN 1 THEN 'Truper'
+                 WHEN 2 THEN 'Bosch'
+                 WHEN 3 THEN 'Makita'
+                 ELSE 'Genérica'
+    END;
+    v_codigo := CASE v_cat
+                  WHEN 'HERRAMIENTAS' THEN 'HERR-'
+                  WHEN 'ELECTRICO'    THEN 'ELEC-'
+                  WHEN 'PLOMERIA'     THEN 'PLOM-'
+                  WHEN 'PINTURA'      THEN 'PINT-'
+                  WHEN 'FERRETERIA'   THEN 'FERR-'
+                  ELSE 'SEGU-'
+    END || LPAD(i,4,'0');
+
+    BEGIN
+    INSERT INTO Productos (nombreProducto, descripcion, codigo_producto, categoria, marca, precio, precio_compra, unidad_medida, stock_minimo, IdProveedor, activo)
+    VALUES (
+               'Producto ' || LPAD(i,3,'0'),
+               'Descripción del producto ' || i,
+               v_codigo,
+               v_cat,
+               v_marca,
+               ROUND(5 + i*1.25, 2),
+               ROUND(3 + i*0.95, 2),
+               'UNIDAD',
+               CASE WHEN MOD(i,7)=0 THEN 10 WHEN MOD(i,7)=1 THEN 5 ELSE 3 END,
+               v_id_prv,
+               1
+           );
+    EXCEPTION WHEN DUP_VAL_ON_INDEX THEN NULL; END;
+    END LOOP;
+
+  -- Asegurar fila en Stock por producto (si no existe)
+    INSERT /*+ ignore_row_on_dupkey_index(Stock, uk_stock_producto) */
+    INTO Stock (cantidad, ubicacion, IdProducto)
+    SELECT 0, 'ALMACEN PRINCIPAL', p.IdProducto
+    FROM Productos p
+             LEFT JOIN Stock s ON s.IdProducto = p.IdProducto
+    WHERE s.IdProducto IS NULL;
+
+    COMMIT;
+    END;
+    /
+
+--------------------------------------------------------------------
+-- PEDIDOS (20) + detallePedido (3 items c/u)
+-- Luego marcamos RECIBIDO para que el trigger sume al STOCK
+--------------------------------------------------------------------
+DECLARE
+    v_id_pedido   NUMBER;
+  v_id_producto NUMBER;
+  v_precio      NUMBER;
+  v_cant        NUMBER;
+  v_user_id     NUMBER;
+  v_prv_id      NUMBER;
+    BEGIN
+    SELECT MIN(IdUsuario) INTO v_user_id FROM Usuarios;
+
+    FOR i IN 1..20 LOOP
+    -- proveedor rotativo
+    SELECT IdProveedor INTO v_prv_id FROM (
+                                              SELECT IdProveedor, ROW_NUMBER() OVER (ORDER BY IdProveedor) rn FROM Proveedores
+                                          ) WHERE rn = MOD(i-1, 25) + 1;
+
+    -- Insertar pedido (numero_pedido autogenerado si es NULL)
+    INSERT INTO Pedidos (numero_pedido, fecha, total, estado, descripcion, fecha_entrega_esperada, observaciones, IdProveedor, IdUsuario)
+    VALUES (NULL, TRUNC(SYSDATE) - (25 - i), 0, 'PENDIENTE', 'Pedido de reposición #'||i, TRUNC(SYSDATE) - (25 - i) + 5, 'Generado por datos masivos', v_prv_id, v_user_id)
+        RETURNING IdPedido INTO v_id_pedido;
+
+    -- 3 renglones por pedido
+    FOR k IN 1..3 LOOP
+    SELECT IdProducto, precio_compra INTO v_id_producto, v_precio FROM (
+                                                                           SELECT p.IdProducto, p.precio_compra, ROW_NUMBER() OVER (ORDER BY p.IdProducto) rn
+                                                                           FROM Productos p
+                                                                       ) WHERE rn = MOD(i*3 + k, 60) + 1;
+
+    v_cant := 40 + (10 * k) + MOD(i, 5);
+
+    INSERT INTO detallePedido (precioUni, cantidad, IdPedido, IdProducto)
+    VALUES (v_precio, v_cant, v_id_pedido, v_id_producto);
+    END LOOP;
+
+    -- Marcar recibido para disparar trigger de actualización de stock
+    UPDATE Pedidos SET estado = 'RECIBIDO' WHERE IdPedido = v_id_pedido;
+    END LOOP;
+
+    COMMIT;
+    END;
+    /
+
+--------------------------------------------------------------------
+-- FACTURAS (20) + detalleFactura (2-3 items c/u) CONSUMIENDO STOCK
+-- Con manejo de stock=0 para evitar error del trigger
+--------------------------------------------------------------------
+DECLARE
+    v_id_factura   NUMBER;
+  v_cliente_id   NUMBER;
+  v_producto_id  NUMBER;
+  v_precio_venta NUMBER;
+  v_stock_disp   NUMBER;
+  v_qty          NUMBER;
+  v_user_id      NUMBER;
+  v_metodo       VARCHAR2(30);
+  v_estado       VARCHAR2(20);
+    BEGIN
+    SELECT MIN(IdUsuario) INTO v_user_id FROM Usuarios;
+
+    FOR i IN 1..20 LOOP
+    -- Cliente rotativo
+    SELECT IdCliente
+    INTO v_cliente_id
+    FROM (
+             SELECT IdCliente, ROW_NUMBER() OVER (ORDER BY IdCliente) rn
+             FROM Clientes
+         )
+    WHERE rn = MOD(i-1, 30) + 1;
+
+    v_metodo := CASE MOD(i,4)
+                  WHEN 0 THEN 'EFECTIVO'
+                  WHEN 1 THEN 'TARJETA'
+                  WHEN 2 THEN 'TRANSFERENCIA'
+                  ELSE 'CREDITO'
+    END;
+
+    v_estado := CASE WHEN MOD(i,5)=0 THEN 'PENDIENTE' ELSE 'PAGADA' END;
+
+    -- Insertar factura (numero_factura autogenerado si es NULL por trigger)
+    INSERT INTO Factura (numero_factura, fecha, IdCliente, IdUsuario, metodo_pago, estado, observaciones)
+    VALUES (NULL, TRUNC(SYSDATE) - (20 - i), v_cliente_id, v_user_id, v_metodo, v_estado, 'Venta masiva #'||i)
+        RETURNING IdFactura INTO v_id_factura;
+
+    -- 2 a 3 renglones por factura
+    FOR k IN 1..(2 + MOD(i,2)) LOOP
+      -- Elegir un producto y su stock
+    SELECT IdProducto, precio, cantidad AS stock_disp
+    INTO v_producto_id, v_precio_venta, v_stock_disp
+    FROM (
+             SELECT p.IdProducto,
+                    p.precio,
+                    NVL(st.cantidad,0) AS cantidad,
+                    ROW_NUMBER() OVER (ORDER BY p.IdProducto) rn
+             FROM Productos p
+                      LEFT JOIN Stock st ON st.IdProducto = p.IdProducto
+         )
+    WHERE rn = MOD(i*5 + k, 60) + 1;
+
+    -- Si no hay stock, saltar el renglón
+    IF v_stock_disp <= 0 THEN
+        CONTINUE;
+    END IF;
+
+      -- Cantidad a vender (no exceder stock, mínimo 1)
+      v_qty := LEAST(5 + MOD(i+k, 4), v_stock_disp);
+
+      IF v_qty > 0 THEN
+        INSERT INTO detalleFactura (IdFactura, IdProducto, precioUni, cantidad, descuento_item)
+        VALUES (v_id_factura, v_producto_id, v_precio_venta, v_qty, CASE WHEN MOD(i+k,7)=0 THEN 1 ELSE 0 END);
+    END IF;
+    END LOOP;
+    -- Totales se recalculan por trg_factura_actualizar_total
+    END LOOP;
+
+    COMMIT;
+    END;
+    /
+
+--------------------------------------------------------------------
+-- STOCK: Asegurar fila por producto (idempotente)
+--------------------------------------------------------------------
+    BEGIN
+    INSERT /*+ ignore_row_on_dupkey_index(Stock, uk_stock_producto) */
+    INTO Stock (cantidad, ubicacion, IdProducto)
+    SELECT 0, 'ALMACEN PRINCIPAL', p.IdProducto
+    FROM Productos p
+             LEFT JOIN Stock s ON s.IdProducto = p.IdProducto
+    WHERE s.IdProducto IS NULL;
+    COMMIT;
+    END;
+    /
+
+--------------------------------------------------------------------
+-- REPORTES DE SANIDAD / VERIFICACIÓN (opcional)
+--------------------------------------------------------------------
+-- Conteos por tabla
+    SELECT 'Roles' tabla, COUNT(*) total FROM Roles
+    UNION ALL SELECT 'Usuarios', COUNT(*) FROM Usuarios
+    UNION ALL SELECT 'Clientes', COUNT(*) FROM Clientes
+    UNION ALL SELECT 'Empleados', COUNT(*) FROM Empleados
+    UNION ALL SELECT 'Horarios', COUNT(*) FROM Horarios
+    UNION ALL SELECT 'Proveedores', COUNT(*) FROM Proveedores
+    UNION ALL SELECT 'Productos', COUNT(*) FROM Productos
+    UNION ALL SELECT 'Stock', COUNT(*) FROM Stock
+    UNION ALL SELECT 'Pedidos', COUNT(*) FROM Pedidos
+    UNION ALL SELECT 'detallePedido', COUNT(*) FROM detallePedido
+    UNION ALL SELECT 'Factura', COUNT(*) FROM Factura
+    UNION ALL SELECT 'detalleFactura', COUNT(*) FROM detalleFactura;
+
+-- Distribución de usuarios por rol (para revisar el aleatorio)
+    SELECT r.nombre AS rol, COUNT(*) AS usuarios
+    FROM Usuarios u
+             JOIN Roles r ON r.IdRol = u.IdRol
+    WHERE u.nombreUsuario LIKE 'user%'
+    GROUP BY r.nombre
+    ORDER BY usuarios DESC;
+
+-- Muestra stock de algunos productos
+    SELECT p.IdProducto, p.codigo_producto, p.nombreProducto, NVL(s.cantidad,0) as stock_actual
+    FROM Productos p LEFT JOIN Stock s ON s.IdProducto = p.IdProducto
+    ORDER BY p.IdProducto
+        FETCH FIRST 20 ROWS ONLY;
+
+
 
     COMMIT;
 
