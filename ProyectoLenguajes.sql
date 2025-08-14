@@ -1,10 +1,8 @@
-﻿    -- ========================================================================
-    -- PROYECTO LENGUAJE DE DATOS - SISTEMA FERRETERÃA
-    -- Archivo SQL completo con procedimientos, funciones, cursores, 
-    -- expresiones regulares y triggers para gestiÃ³n de ferreterÃ­a
-    -- ========================================================================
 
-    -- Eliminar tablas si existen (para recreaciÃ³n limpia)
+    -- PROYECTO LENGUAJE DE DATOS - SISTEMA FERRETERIA
+    
+
+    -- Eliminar tablas si existen
     BEGIN
         EXECUTE IMMEDIATE 'DROP TABLE detalleFactura CASCADE CONSTRAINTS';
     EXCEPTION
@@ -89,9 +87,9 @@
     END;
     /
 
-    -- ========================================================================
-    -- DEFINICIÃ“N DE TABLAS
-    -- ========================================================================
+
+    -- TABLAS
+   
 
     -- Tabla Roles: Define los diferentes tipos de usuarios del sistema
     CREATE TABLE Roles (
@@ -286,9 +284,8 @@
         CONSTRAINT uk_detalle_factura_producto UNIQUE (IdFactura, IdProducto) -- Un producto por factura
     );
 
-    -- ========================================================================
     -- SECUENCIAS PARA NUMERACIÃ“N AUTOMÃTICA
-    -- ========================================================================
+    
 
     -- Secuencia para nÃºmeros de pedido (crear solo si no existe)
     DECLARE
@@ -312,16 +309,15 @@
     END;
     /
 
-    -- ========================================================================
-    -- TRIGGERS PARA AUDITORÃA Y VALIDACIONES
-    -- ========================================================================
 
-    -- TRIGGER 1: Actualizar fecha de modificaciÃ³n en Clientes
+    -- TRIGGERS
+
+    -- TRIGGER 1: Actualizar fecha de modificacion en Clientes
     CREATE OR REPLACE TRIGGER trg_clientes_fecha_mod
         BEFORE UPDATE ON Clientes
         FOR EACH ROW
     BEGIN
-        -- Actualiza automÃ¡ticamente la fecha de modificaciÃ³n al momento de actualizar un cliente
+        -- Actualiza automaticamente la fecha de modificacion al momento de actualizar un cliente
         :NEW.fecha_modificacion := SYSDATE;
     END;
     /
@@ -331,7 +327,7 @@
         BEFORE INSERT OR UPDATE ON Clientes
         FOR EACH ROW
     BEGIN
-        -- Valida que el email tenga un formato correcto usando expresiÃ³n regular
+        -- Valida que el email tenga un formato correcto usando expresion regular
         IF :NEW.email IS NOT NULL AND NOT REGEXP_LIKE(:NEW.email, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$') THEN
             RAISE_APPLICATION_ERROR(-20001, 'El formato del email no es vÃ¡lido');
         END IF;
@@ -343,12 +339,12 @@
     END;
     /
 
-    -- TRIGGER 3: Actualizar fecha de modificaciÃ³n en Empleados
+    -- TRIGGER 3: Actualizar fecha de modificacion en Empleados
     CREATE OR REPLACE TRIGGER trg_empleados_fecha_mod
         BEFORE UPDATE ON Empleados
         FOR EACH ROW
     BEGIN
-        -- Actualiza automÃ¡ticamente la fecha de modificaciÃ³n al momento de actualizar un empleado
+        -- Actualiza automÃ¡ticamente la fecha de modificacion al momento de actualizar un empleado
         :NEW.fecha_modificacion := SYSDATE;
     END;
     /
@@ -370,34 +366,34 @@
     END;
     /
 
-    -- TRIGGER 5: Actualizar fecha de modificaciÃ³n en Productos
+    -- TRIGGER 5: Actualizar fecha de modificacion en Productos
     CREATE OR REPLACE TRIGGER trg_productos_fecha_mod
         BEFORE UPDATE ON Productos
         FOR EACH ROW
     BEGIN
-        -- Actualiza automÃ¡ticamente la fecha de modificaciÃ³n al momento de actualizar un producto
+        -- Actualiza automticamente la fecha de modificacion al momento de actualizar un producto
         :NEW.fecha_modificacion := SYSDATE;
     END;
     /
 
-    -- TRIGGER 6: Generar cÃ³digo de producto automÃ¡tico
+    -- TRIGGER 6: Generar codigo de producto automÃ¡tico
     CREATE OR REPLACE TRIGGER trg_productos_codigo
         BEFORE INSERT ON Productos
         FOR EACH ROW
     BEGIN
-        -- Si no se proporciona cÃ³digo de producto, genera uno automÃ¡tico
+        -- Si no se proporciona codigo de producto, genera uno automatico
         IF :NEW.codigo_producto IS NULL THEN
             :NEW.codigo_producto := 'PROD-' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' || LPAD(seq_numero_pedido.NEXTVAL, 4, '0');
         END IF;
     END;
     /
 
-    -- TRIGGER 7: Generar nÃºmero de pedido automÃ¡tico
+    -- TRIGGER 7: Generar numero de pedido automatico
     CREATE OR REPLACE TRIGGER trg_pedidos_numero
         BEFORE INSERT ON Pedidos
         FOR EACH ROW
     BEGIN
-        -- Genera automÃ¡ticamente el nÃºmero de pedido si no se proporciona
+        -- Genera automaticamente el numero de pedido si no se proporciona
         IF :NEW.numero_pedido IS NULL THEN
             :NEW.numero_pedido := 'PED-' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' || LPAD(seq_numero_pedido.NEXTVAL, 4, '0');
         END IF;
@@ -450,12 +446,12 @@
     END;
     /
 
-    -- TRIGGER 9: Generar nÃºmero de factura automÃ¡tico
+    -- TRIGGER 9: Generar numero de factura automatico
     CREATE OR REPLACE TRIGGER trg_factura_numero
         BEFORE INSERT ON Factura
         FOR EACH ROW
     BEGIN
-        -- Genera automÃ¡ticamente el nÃºmero de factura si no se proporciona
+        -- Genera automaticamente el numero de factura si no se proporciona
         IF :NEW.numero_factura IS NULL THEN
             :NEW.numero_factura := 'FAC-' || TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' || LPAD(seq_numero_factura.NEXTVAL, 4, '0');
         END IF;
@@ -512,7 +508,7 @@
     END;
     /
 
-    -- TRIGGER 11: Actualizar stock al confirmar recepciÃ³n de pedido
+    -- TRIGGER 11: Actualizar stock al confirmar recepcion de pedido
     CREATE OR REPLACE TRIGGER trg_stock_actualizar_pedido
         AFTER UPDATE ON Pedidos
         FOR EACH ROW
@@ -566,12 +562,12 @@
     END;
     /
 
-    -- ========================================================================
+
     -- PAQUETE PRINCIPAL CON PROCEDIMIENTOS Y FUNCIONES
-    -- ========================================================================
+
 
     CREATE OR REPLACE PACKAGE PKG_FERRETERIA AS
-        -- DeclaraciÃ³n de tipos y constantes
+        -- DeclaraciOn de tipos y constantes
         TYPE t_resultado IS RECORD (
             exito BOOLEAN,
             mensaje VARCHAR2(500)
@@ -674,10 +670,10 @@
         PROCEDURE sp_eliminar_producto_jdbc(p_id NUMBER);
         
         -- Funciones de consulta con EXPRESIONES REGULARES
-        FUNCTION fn_buscar_clientes_por_email(p_patron VARCHAR2) RETURN SYS_REFCURSOR; -- EXPRESIÃ“N REGULAR
-        FUNCTION fn_buscar_productos_por_codigo(p_patron VARCHAR2) RETURN SYS_REFCURSOR; -- EXPRESIÃ“N REGULAR
-        FUNCTION fn_validar_telefonos_empleados RETURN SYS_REFCURSOR; -- EXPRESIÃ“N REGULAR
-        FUNCTION fn_buscar_proveedores_por_ruc(p_patron VARCHAR2) RETURN SYS_REFCURSOR; -- EXPRESIÃ“N REGULAR
+        FUNCTION fn_buscar_clientes_por_email(p_patron VARCHAR2) RETURN SYS_REFCURSOR; -- EXPRESION REGULAR
+        FUNCTION fn_buscar_productos_por_codigo(p_patron VARCHAR2) RETURN SYS_REFCURSOR; -- EXPRESION REGULAR
+        FUNCTION fn_validar_telefonos_empleados RETURN SYS_REFCURSOR; -- EXPRESION REGULAR
+        FUNCTION fn_buscar_proveedores_por_ruc(p_patron VARCHAR2) RETURN SYS_REFCURSOR; -- EXPRESION REGULAR
         
         -- Funciones de reportes
         FUNCTION fn_reporte_ventas_mes(p_mes NUMBER, p_anio NUMBER) RETURN SYS_REFCURSOR;
@@ -687,9 +683,7 @@
     END PKG_FERRETERIA;
     /
 
-    -- ========================================================================
-    -- IMPLEMENTACIÃ“N DEL PAQUETE
-    -- ========================================================================
+--- PAQUETES 
 
     CREATE OR REPLACE PACKAGE BODY PKG_FERRETERIA AS
 
@@ -700,7 +694,7 @@
             INSERT INTO Roles (nombre, descripcion)
             VALUES (p_nombre, p_descripcion);
             
-            -- Confirma la transacciÃ³n
+            -- Confirma la transaccion
             COMMIT;
             
             -- Retorna resultado exitoso
@@ -794,7 +788,7 @@
             RETURN cur_rol;
         END fn_obtener_rol;
         
-        -- FunciÃ³n para listar todos los roles
+        -- Funcion para listar todos los roles
         FUNCTION fn_listar_roles RETURN SYS_REFCURSOR AS
             cur_roles SYS_REFCURSOR;
         BEGIN
@@ -809,13 +803,13 @@
         PROCEDURE sp_insertar_usuario(p_nombre_usuario VARCHAR2, p_contrasena VARCHAR2, p_email VARCHAR2, 
                                     p_nombre VARCHAR2, p_apellidos VARCHAR2, p_telefono VARCHAR2, 
                                     p_id_rol NUMBER, p_resultado OUT t_resultado) AS
-            -- Cursor para validar que el rol existe y estÃ¡ activo
+            -- Cursor para validar que el rol existe y esta activo
             CURSOR cur_validar_rol IS
                 SELECT activo FROM Roles WHERE IdRol = p_id_rol;
             
             v_rol_activo NUMBER;
         BEGIN
-            -- Valida que el rol existe y estÃ¡ activo usando cursor
+            -- Valida que el rol existe y esta activo usando cursor
             OPEN cur_validar_rol;
             FETCH cur_validar_rol INTO v_rol_activo;
             
@@ -829,7 +823,7 @@
             IF v_rol_activo = 0 THEN
                 CLOSE cur_validar_rol;
                 p_resultado.exito := FALSE;
-                p_resultado.mensaje := 'El rol especificado estÃ¡ inactivo';
+                p_resultado.mensaje := 'El rol especificado esta inactivo';
                 RETURN;
             END IF;
             
@@ -862,7 +856,7 @@
             CURSOR cur_validar_usuario IS
                 SELECT activo FROM Usuarios WHERE IdUsuario = p_id;
             
-            -- Cursor para validar que el rol existe y estÃ¡ activo
+            -- Cursor para validar que el rol existe y esta activo
             CURSOR cur_validar_rol IS
                 SELECT activo FROM Roles WHERE IdRol = p_id_rol;
             
@@ -881,7 +875,7 @@
             END IF;
             CLOSE cur_validar_usuario;
             
-            -- Valida que el rol existe y estÃ¡ activo
+            -- Valida que el rol existe y esta activo
             OPEN cur_validar_rol;
             FETCH cur_validar_rol INTO v_rol_activo;
             
@@ -957,7 +951,7 @@
         
         -- PROCEDIMIENTO CON CURSOR: Validar usuarios activos
         PROCEDURE sp_validar_usuarios_activos AS
-            -- Cursor para obtener usuarios que no han accedido en los Ãºltimos 90 dÃ­as
+            -- Cursor para obtener usuarios que no han accedido en los ultimos 90 dias
             CURSOR cur_usuarios_inactivos IS
                 SELECT IdUsuario, nombreUsuario, nombre, apellidos, ultimo_acceso
                 FROM Usuarios
@@ -975,7 +969,7 @@
                 
                 v_count := v_count + 1;
                 
-                -- Log de la acciÃ³n (aquÃ­ podrÃ­as insertar en una tabla de auditorÃ­a)
+                -- Log de la accion 
                 DBMS_OUTPUT.PUT_LINE('Usuario ' || usuario.nombreUsuario || ' marcado como inactivo');
             END LOOP;
             
@@ -988,7 +982,7 @@
                 DBMS_OUTPUT.PUT_LINE('Error al validar usuarios activos: ' || SQLERRM);
         END sp_validar_usuarios_activos;
         
-        -- FunciÃ³n para obtener un usuario especÃ­fico
+        -- Funcion para obtener un usuario especifico
         FUNCTION fn_obtener_usuario(p_id NUMBER) RETURN SYS_REFCURSOR AS
             cur_usuario SYS_REFCURSOR;
         BEGIN
@@ -1002,7 +996,7 @@
             RETURN cur_usuario;
         END fn_obtener_usuario;
         
-        -- FunciÃ³n para listar todos los usuarios
+        -- Funcion para listar todos los usuarios
         FUNCTION fn_listar_usuarios RETURN SYS_REFCURSOR AS
             cur_usuarios SYS_REFCURSOR;
         BEGIN
@@ -1165,7 +1159,7 @@
             END IF;
         END sp_eliminar_cliente_jdbc;
         
-        -- PROCEDIMIENTO CON CURSOR: Actualizar lÃ­mites de crÃ©dito de clientes
+        -- PROCEDIMIENTO CON CURSOR: Actualizar limites de credito de clientes
         PROCEDURE sp_actualizar_limites_credito AS
             -- Cursor para clientes VIP con historial de compras
             CURSOR cur_clientes_vip IS
@@ -1183,7 +1177,7 @@
             v_nuevo_limite NUMBER;
             v_count NUMBER := 0;
         BEGIN
-            -- Recorre clientes VIP y actualiza sus lÃ­mites de crÃ©dito
+            -- Recorre clientes VIP y actualiza sus limites de credito
             FOR cliente IN cur_clientes_vip LOOP
                 -- Calcula nuevo lÃ­mite basado en el historial (20% del total de compras)
                 v_nuevo_limite := ROUND(cliente.total_compras * 0.20, 2);
@@ -1193,7 +1187,7 @@
                     v_nuevo_limite := 5000;
                 END IF;
                 
-                -- Actualiza el lÃ­mite de crÃ©dito
+                -- Actualiza el limite de credito
                 UPDATE Clientes 
                 SET limite_credito = v_nuevo_limite,
                     fecha_modificacion = SYSDATE
@@ -1214,7 +1208,7 @@
                 DBMS_OUTPUT.PUT_LINE('Error al actualizar lÃ­mites de crÃ©dito: ' || SQLERRM);
         END sp_actualizar_limites_credito;
         
-        -- FunciÃ³n para obtener un cliente especÃ­fico
+        -- Funcion para obtener un cliente especifico
         FUNCTION fn_obtener_cliente(p_id NUMBER) RETURN SYS_REFCURSOR AS
             cur_cliente SYS_REFCURSOR;
         BEGIN
@@ -1227,7 +1221,7 @@
             RETURN cur_cliente;
         END fn_obtener_cliente;
         
-        -- FunciÃ³n para listar todos los clientes
+        -- Funcion para listar todos los clientes
         FUNCTION fn_listar_clientes RETURN SYS_REFCURSOR AS
             cur_clientes SYS_REFCURSOR;
         BEGIN
@@ -1240,8 +1234,7 @@
             RETURN cur_clientes;
         END fn_listar_clientes;
         
-        -- Los demÃ¡s procedimientos CRUD para Empleados, Proveedores, Productos siguen el mismo patrÃ³n...
-        -- (Por brevedad, incluyo solo algunos representativos)
+        -- Los demas procedimientos CRUD para Empleados
         
         -- PROCEDIMIENTO CON CURSOR: Insertar producto
         PROCEDURE sp_insertar_producto(p_nombre VARCHAR2, p_descripcion VARCHAR2, p_codigo VARCHAR2,
@@ -1540,9 +1533,9 @@
             END IF;
         END sp_eliminar_proveedor_jdbc;
         
-        -- PROCEDIMIENTO CON CURSOR: Alertas de stock mÃ­nimo
+        -- PROCEDIMIENTO CON CURSOR: Alertas de stock minimo
         PROCEDURE sp_alertas_stock_minimo AS
-            -- Cursor para productos con stock bajo el mÃ­nimo
+            -- Cursor para productos con stock bajo el minimo
             CURSOR cur_stock_minimo IS
                 SELECT p.IdProducto, p.nombreProducto, p.stock_minimo, 
                     NVL(s.cantidad, 0) as stock_actual,
@@ -1557,11 +1550,11 @@
             
             v_count NUMBER := 0;
         BEGIN
-            DBMS_OUTPUT.PUT_LINE('=== ALERTA DE STOCK MÃNIMO ===');
+            DBMS_OUTPUT.PUT_LINE('=== ALERTA DE STOCK MINIMO ===');
             DBMS_OUTPUT.PUT_LINE('Productos que requieren reabastecimiento:');
             DBMS_OUTPUT.PUT_LINE('');
             
-            -- Recorre productos con stock mÃ­nimo
+            -- Recorre productos con stock manimo
             FOR producto IN cur_stock_minimo LOOP
                 v_count := v_count + 1;
                 
@@ -1585,20 +1578,20 @@
                 DBMS_OUTPUT.PUT_LINE('Error al generar alertas de stock: ' || SQLERRM);
         END sp_alertas_stock_minimo;
         
-        -- FUNCIÃ“N CON EXPRESIÃ“N REGULAR: Buscar clientes por email
+        -- FUNCION CON EXPRESION REGULAR: Buscar clientes por email
         FUNCTION fn_buscar_clientes_por_email(p_patron VARCHAR2) RETURN SYS_REFCURSOR AS
             cur_clientes SYS_REFCURSOR;
         BEGIN
             OPEN cur_clientes FOR
                 SELECT IdCliente, nombreCliente, apellidos, email, telefono, tipo_cliente
                 FROM Clientes
-                WHERE REGEXP_LIKE(email, p_patron, 'i') -- ExpresiÃ³n regular case-insensitive
+                WHERE REGEXP_LIKE(email, p_patron, 'i') -- Expresion regular case-insensitive
                 AND activo = 1
                 ORDER BY nombreCliente, apellidos;
             RETURN cur_clientes;
         END fn_buscar_clientes_por_email;
         
-        -- FUNCIÃ“N CON EXPRESIÃ“N REGULAR: Buscar productos por cÃ³digo
+        -- FUNCIÃ“N CON EXPRESION REGULAR: Buscar productos por codigo
         FUNCTION fn_buscar_productos_por_codigo(p_patron VARCHAR2) RETURN SYS_REFCURSOR AS
             cur_productos SYS_REFCURSOR;
         BEGIN
@@ -1607,13 +1600,13 @@
                     p.marca, p.precio, NVL(s.cantidad, 0) as stock
                 FROM Productos p
                 LEFT JOIN Stock s ON p.IdProducto = s.IdProducto
-                WHERE REGEXP_LIKE(p.codigo_producto, p_patron, 'i') -- ExpresiÃ³n regular para cÃ³digos
+                WHERE REGEXP_LIKE(p.codigo_producto, p_patron, 'i') -- Expresion regular para codigos
                 AND p.activo = 1
                 ORDER BY p.codigo_producto;
             RETURN cur_productos;
         END fn_buscar_productos_por_codigo;
         
-        -- FUNCIÃ“N CON EXPRESIÃ“N REGULAR: Validar telÃ©fonos de empleados
+        -- FUNCION CON EXPRESION REGULAR: Validar telEfonos de empleados
         FUNCTION fn_validar_telefonos_empleados RETURN SYS_REFCURSOR AS
             cur_empleados SYS_REFCURSOR;
         BEGIN
@@ -1631,7 +1624,7 @@
             RETURN cur_empleados;
         END fn_validar_telefonos_empleados;
         
-        -- FUNCIÃ“N CON EXPRESIÃ“N REGULAR: Buscar proveedores por RUC
+        -- FUNCION CON EXPRESION REGULAR: Buscar proveedores
         FUNCTION fn_buscar_proveedores_por_ruc(p_patron VARCHAR2) RETURN SYS_REFCURSOR AS
             cur_proveedores SYS_REFCURSOR;
         BEGIN
@@ -1644,7 +1637,7 @@
             RETURN cur_proveedores;
         END fn_buscar_proveedores_por_ruc;
         
-        -- FunciÃ³n de reporte: Ventas del mes
+        -- Funcion de reporte: Ventas del mes
         FUNCTION fn_reporte_ventas_mes(p_mes NUMBER, p_anio NUMBER) RETURN SYS_REFCURSOR AS
             cur_ventas SYS_REFCURSOR;
         BEGIN
@@ -1665,7 +1658,7 @@
             RETURN cur_ventas;
         END fn_reporte_ventas_mes;
         
-        -- FunciÃ³n de reporte: Productos mÃ¡s vendidos
+        -- Funcion de reporte: Productos mas vendidos
         FUNCTION fn_productos_mas_vendidos(p_limite NUMBER DEFAULT 10) RETURN SYS_REFCURSOR AS
             cur_productos SYS_REFCURSOR;
         BEGIN
@@ -1686,7 +1679,7 @@
             RETURN cur_productos;
         END fn_productos_mas_vendidos;
         
-        -- FunciÃ³n de reporte: Clientes con mayor compra
+        -- Funcionn de reporte: Clientes con mayor compra
         FUNCTION fn_clientes_mayor_compra RETURN SYS_REFCURSOR AS
             cur_clientes SYS_REFCURSOR;
         BEGIN
@@ -1707,9 +1700,9 @@
             RETURN cur_clientes;
         END fn_clientes_mayor_compra;
         
-        -- ==============================
-        -- CRUD Empleados (faltantes)
-        -- ==============================
+	
+        -- CRUD Empleados 
+    
         PROCEDURE sp_insertar_empleado(p_nombre VARCHAR2, p_apellidos VARCHAR2, p_direccion VARCHAR2,
                                     p_telefono VARCHAR2, p_email VARCHAR2, p_cedula VARCHAR2,
                                     p_puesto VARCHAR2, p_salario NUMBER, p_resultado OUT t_resultado) AS
@@ -1827,9 +1820,8 @@
             RETURN cur_emp;
         END fn_listar_empleados;
 
-        -- ==============================
-        -- CRUD Proveedores (faltantes)
-        -- ==============================
+		-- CRUD Proveedores
+     
         PROCEDURE sp_insertar_proveedor(p_nombre VARCHAR2, p_direccion VARCHAR2, p_telefono VARCHAR2,
                                         p_email VARCHAR2, p_contacto VARCHAR2, p_ruc VARCHAR2,
                                         p_condiciones_pago VARCHAR2, p_resultado OUT t_resultado) AS
@@ -1947,11 +1939,10 @@
     END PKG_FERRETERIA;
     /
 
-    -- ========================================================================
     -- DATOS DE PRUEBA INICIAL
-    -- ========================================================================
+ 
 
-    -- Insertar roles bÃ¡sicos
+    -- Insertar roles 
     INSERT INTO Roles (nombre, descripcion) VALUES ('ADMINISTRADOR', 'Acceso completo al sistema');
     INSERT INTO Roles (nombre, descripcion) VALUES ('VENDEDOR', 'Gestion de ventas y clientes');
     INSERT INTO Roles (nombre, descripcion) VALUES ('BODEGUERO', 'Gestio    n de inventario y stock');
@@ -1978,9 +1969,8 @@
     -- Confirmar cambios
     COMMIT;
 
-    -- ========================================================================
     -- PAQUETE DE VENTAS (FACTURAS)
-    -- ========================================================================
+ 
     CREATE OR REPLACE PACKAGE PKG_VENTAS AS
         FUNCTION fn_listar_facturas RETURN SYS_REFCURSOR;
         FUNCTION fn_obtener_factura(p_id NUMBER) RETURN SYS_REFCURSOR;
@@ -2058,7 +2048,7 @@
         BEGIN
             INSERT INTO detalleFactura (IdFactura, IdProducto, precioUni, cantidad, descuento_item)
             VALUES (p_id_factura, p_id_producto, p_precio, p_cantidad, NVL(p_descuento, 0));
-            -- trg_factura_actualizar_total actualizarÃ¡ subtotal/impuesto/total
+            -- trg_factura_actualizar_total actualiza el subtotal/impuesto/total
             COMMIT;
         EXCEPTION
             WHEN OTHERS THEN
@@ -2079,9 +2069,8 @@
     END PKG_VENTAS;
     /
 
-    -- ========================================================================
     -- PAQUETE DE COMPRAS (PEDIDOS)
-    -- ========================================================================
+   
     CREATE OR REPLACE PACKAGE PKG_COMPRAS AS
         FUNCTION fn_listar_pedidos RETURN SYS_REFCURSOR;
         FUNCTION fn_obtener_pedido(p_id NUMBER) RETURN SYS_REFCURSOR;
@@ -2178,9 +2167,8 @@
     END PKG_COMPRAS;
     /
 
-    -- ========================================================================
     -- PAQUETE DE HORARIOS
-    -- ========================================================================
+
     CREATE OR REPLACE PACKAGE PKG_HORARIOS AS
         FUNCTION fn_listar_horarios RETURN SYS_REFCURSOR;
         FUNCTION fn_obtener_horario(p_id NUMBER) RETURN SYS_REFCURSOR;
@@ -2289,18 +2277,17 @@
 
     COMMIT;
 
-    -- ========================================================================
+
     -- PROCEDIMIENTOS DE UTILIDAD Y MANTENIMIENTO
-    -- ========================================================================
+
 
     -- Procedimiento para respaldar datos importantes
     CREATE OR REPLACE PROCEDURE sp_backup_diario AS
     BEGIN
-        -- Este procedimiento ejecutarÃ­a respaldos automÃ¡ticos
+        -- Este procedimiento ejecuta respaldos automaticos 
         DBMS_OUTPUT.PUT_LINE('Ejecutando respaldo diario - ' || TO_CHAR(SYSDATE, 'DD/MM/YYYY HH24:MI:SS'));
         
-        -- AquÃ­ irÃ­an las instrucciones de respaldo especÃ­ficas
-        -- Por ejemplo, exportar datos crÃ­ticos o crear copias de seguridad
+        -- Por ejemplo, exportar datos s o crear copias de seguridad
         
         DBMS_OUTPUT.PUT_LINE('Respaldo completado exitosamente');
     EXCEPTION
@@ -2313,7 +2300,7 @@
     CREATE OR REPLACE PROCEDURE sp_limpiar_datos_temporales AS
         v_count NUMBER;
     BEGIN
-        -- Elimina facturas en estado PENDIENTE con mÃ¡s de 30 dÃ­as
+        -- Elimina facturas en estado PENDIENTE con mas de 30 dias
         DELETE FROM detalleFactura 
         WHERE IdFactura IN (
             SELECT IdFactura FROM Factura 
@@ -2337,11 +2324,10 @@
     END;
     /
 
-    -- ========================================================================
-    -- ÃNDICES PARA OPTIMIZACIÃ“N DE CONSULTAS
-    -- ========================================================================
 
-    -- Ãndices para mejorar rendimiento en consultas frecuentes (seguros si ya existen)
+
+-- Indices para mejorar rendimiento en consultas frecuentes
+    
     BEGIN
     EXECUTE IMMEDIATE 'CREATE INDEX idx_clientes_email ON Clientes(email)';
     EXCEPTION
@@ -2398,36 +2384,11 @@
     END;
     /
 
-    -- ========================================================================
-    -- COMENTARIOS FINALES
-    -- ========================================================================
-
-    -- Este archivo SQL completo incluye:
-    -- 1. DefiniciÃ³n completa de todas las tablas con restricciones y validaciones
-    -- 2. 12 triggers para auditorÃ­a, validaciones y automatizaciÃ³n
-    -- 3. Un paquete completo con mÃ¡s de 20 procedimientos y funciones
-    -- 4. 4 procedimientos que utilizan cursores para procesamiento avanzado
-    -- 5. 4 funciones que implementan expresiones regulares para validaciones
-    -- 6. Triggers en 6 tablas diferentes con 2 acciones cada una
-    -- 7. DocumentaciÃ³n detallada de cada componente
-    -- 8. Datos de prueba inicial para comenzar a trabajar
-    -- 9. Ãndices para optimizaciÃ³n del rendimiento
-    -- 10. Procedimientos de mantenimiento y utilidad
-
-    -- El sistema estÃ¡ listo para ser implementado en Oracle Database
-    -- y proporciona una base sÃ³lida para el desarrollo de la aplicaciÃ³n Java Spring Boot
-/* ================================================================
-   DATOS MASIVOS (≥20 registros por tabla) - ORACLE
-   Requiere que las tablas, triggers y paquetes ya existan.
-   NO agrega roles nuevos; usa los 4 roles base existentes.
-   Pegar después del último COMMIT de creación.
-   ================================================================ */
 
 ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD';
 
---------------------------------------------------------------------
 -- USUARIOS (25) con rol aleatorio entre los 4 existentes
---------------------------------------------------------------------
+
 DECLARE
     TYPE t_num_tab IS TABLE OF NUMBER;
   v_roles     t_num_tab;        -- IDs de los 4 roles base
@@ -2478,9 +2439,9 @@ DECLARE
     END;
     /
 
---------------------------------------------------------------------
+
 -- CLIENTES (30)
---------------------------------------------------------------------
+
 DECLARE
     BEGIN
     FOR i IN 1..30 LOOP
@@ -2505,9 +2466,9 @@ DECLARE
     END;
     /
 
---------------------------------------------------------------------
+
 -- EMPLEADOS (25)
---------------------------------------------------------------------
+
 DECLARE
     BEGIN
     FOR i IN 1..25 LOOP
@@ -2531,9 +2492,9 @@ DECLARE
     END;
     /
 
---------------------------------------------------------------------
+
 -- HORARIOS (60: 3 días * 20 empleados)
---------------------------------------------------------------------
+
 DECLARE
     v_fecha DATE := TRUNC(SYSDATE)-10;
     BEGIN
@@ -2549,9 +2510,9 @@ DECLARE
     END;
     /
 
---------------------------------------------------------------------
+
 -- PROVEEDORES (25)
---------------------------------------------------------------------
+
 DECLARE
     BEGIN
     FOR i IN 1..25 LOOP
@@ -2574,9 +2535,9 @@ DECLARE
     END;
     /
 
---------------------------------------------------------------------
+
 -- PRODUCTOS (60) y asegurar fila en STOCK por producto
---------------------------------------------------------------------
+
 DECLARE
     v_min_prv NUMBER;
   v_cnt_prv NUMBER;
@@ -2643,10 +2604,10 @@ DECLARE
     END;
     /
 
---------------------------------------------------------------------
+
 -- PEDIDOS (20) + detallePedido (3 items c/u)
 -- Luego marcamos RECIBIDO para que el trigger sume al STOCK
---------------------------------------------------------------------
+
 DECLARE
     v_id_pedido   NUMBER;
   v_id_producto NUMBER;
@@ -2689,10 +2650,10 @@ DECLARE
     END;
     /
 
---------------------------------------------------------------------
+
 -- FACTURAS (20) + detalleFactura (2-3 items c/u) CONSUMIENDO STOCK
 -- Con manejo de stock=0 para evitar error del trigger
---------------------------------------------------------------------
+
 DECLARE
     v_id_factura   NUMBER;
   v_cliente_id   NUMBER;
@@ -2765,9 +2726,9 @@ DECLARE
     END;
     /
 
---------------------------------------------------------------------
--- STOCK: Asegurar fila por producto (idempotente)
---------------------------------------------------------------------
+
+-- STOCK: Asegurar fila por producto
+
     BEGIN
     INSERT /*+ ignore_row_on_dupkey_index(Stock, uk_stock_producto) */
     INTO Stock (cantidad, ubicacion, IdProducto)
@@ -2779,9 +2740,9 @@ DECLARE
     END;
     /
 
---------------------------------------------------------------------
--- REPORTES DE SANIDAD / VERIFICACIÓN (opcional)
---------------------------------------------------------------------
+
+-- REPORTES DE SANIDAD
+
 -- Conteos por tabla
     SELECT 'Roles' tabla, COUNT(*) total FROM Roles
     UNION ALL SELECT 'Usuarios', COUNT(*) FROM Usuarios
@@ -2813,5 +2774,4 @@ DECLARE
 
 
     COMMIT;
-
 
